@@ -12,6 +12,8 @@ async function participantPost(req: Request, res: Response) {
 
   return res.status(httpStatus.CREATED).json({
     id: participant.id,
+    createdAt: participant.createdAt,
+    updatedAt: participant.updatedAt,
     name: participant.name,
     balance: participant.balance,
   });

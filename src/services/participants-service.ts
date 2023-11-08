@@ -5,6 +5,7 @@ async function createParticipant({
   name,
   balance,
 }: CreateParticipantParams): Promise<Participant> {
+  balance = balance * 100;
   return participantsRepository.create({ name, balance });
 }
 
