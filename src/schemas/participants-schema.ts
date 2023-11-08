@@ -1,4 +1,4 @@
-import { CreateParticipantParams } from "@/services/participants-service";
+import { CreateParticipantParams } from "@/services";
 import Joi from "joi";
 
 export const createParticipantSchema = Joi.object<CreateParticipantParams>({

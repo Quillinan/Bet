@@ -24,8 +24,8 @@ model Game {
   updatedAt     DateTime     @updatedAt
   homeTeamName  String
   awayTeamName  String
-  homeTeamScore Int
-  awayTeamScore Int
+  homeTeamScore Int          @default(0)
+  awayTeamScore Int          @default(0)
   isFinished    Boolean      @default(false)
 }
 
