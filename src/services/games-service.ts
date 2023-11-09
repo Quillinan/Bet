@@ -1,4 +1,4 @@
-import { notFoundError } from "@/errors";
+import { invalidDataError, notFoundError } from "@/errors";
 import { gamesRepository } from "@/repositories";
 import { Game } from "@prisma/client";
 
@@ -18,7 +18,17 @@ async function findGames() {
   return games;
 }
 
+async function findOneGame(gameId: number) {
+  if (!gameId || isNaN(gameId)) throw invalidDataError("gameId");
+
+  const gameWithBets = await gamesRepository.findOne(gameId);
+  if (!gameWithBets) throw notFoundError;
+
+  return gameWithBets;
+}
+
 export const gamesService = {
   createGame,
   findGames,
+  findOneGame,
 };

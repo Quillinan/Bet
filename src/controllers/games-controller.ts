@@ -27,7 +27,15 @@ async function gamesGet(_: any, res: Response): Promise<Response> {
   return res.status(httpStatus.OK).send(games);
 }
 
+async function gameGetWithBets(req: Request, res: Response) {
+  const gameId = Number(req.params.gameId);
+
+  const gamesWithBets = await gamesService.findOneGame(gameId);
+  res.status(httpStatus.OK).send(gamesWithBets);
+}
+
 export const gamesController = {
   gamePost,
   gamesGet,
+  gameGetWithBets,
 };

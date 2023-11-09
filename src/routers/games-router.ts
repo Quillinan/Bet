@@ -7,6 +7,7 @@ const gamesRouter = Router();
 
 gamesRouter
   .post("/", validateBody(createGameSchema), gamesController.gamePost)
-  .get("/", gamesController.gamesGet);
+  .get("/", gamesController.gamesGet)
+  .get("/:gameId", gamesController.gameGetWithBets);
 
 export { gamesRouter };

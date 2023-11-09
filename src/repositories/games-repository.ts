@@ -11,10 +11,10 @@ async function findAll() {
   return prisma.game.findMany();
 }
 
-async function findOne(id: number) {
+async function findOne(gameId: number) {
   return prisma.game.findUnique({
     where: {
-      id,
+      id: gameId,
     },
     include: {
       Bets: true,
@@ -25,4 +25,5 @@ async function findOne(id: number) {
 export const gamesRepository = {
   create,
   findAll,
+  findOne,
 };
