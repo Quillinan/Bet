@@ -11,6 +11,17 @@ async function createGame({
 
 export type CreateGameParams = Pick<Game, "homeTeamName" | "awayTeamName">;
 
+async function updateGame(
+  gameId: number,
+  { homeTeamScore, awayTeamScore }: UpdateGameParams
+): Promise<Game> {
+  if (!gameId || isNaN(gameId)) throw invalidDataError("gameId");
+
+  return gamesRepository.finish(gameId, { homeTeamScore, awayTeamScore });
+}
+
+export type UpdateGameParams = Pick<Game, "homeTeamScore" | "awayTeamScore">;
+
 async function findGames() {
   const games = await gamesRepository.findAll();
   if (games.length === 0) throw notFoundError;
@@ -31,4 +42,5 @@ export const gamesService = {
   createGame,
   findGames,
   findOneGame,
+  updateGame,
 };

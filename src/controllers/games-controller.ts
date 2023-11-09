@@ -22,6 +22,27 @@ async function gamePost(req: Request, res: Response) {
   });
 }
 
+async function gameFinish(req: Request, res: Response) {
+  const { homeTeamScore, awayTeamScore } = req.body;
+  const gameId = Number(req.params.id);
+
+  const game = await gamesService.updateGame(gameId, {
+    homeTeamScore,
+    awayTeamScore,
+  });
+
+  return res.status(httpStatus.OK).json({
+    id: game.id,
+    createdAt: game.createdAt,
+    updatedAt: game.updatedAt,
+    homeTeamName: game.homeTeamName,
+    awayTeamName: game.awayTeamName,
+    homeTeamScore: game.homeTeamScore,
+    awayTeamScore: game.awayTeamScore,
+    isFinished: game.isFinished,
+  });
+}
+
 async function gamesGet(_: any, res: Response): Promise<Response> {
   const games = await gamesService.findGames();
   return res.status(httpStatus.OK).send(games);
@@ -36,6 +57,7 @@ async function gameGetWithBets(req: Request, res: Response) {
 
 export const gamesController = {
   gamePost,
+  gameFinish,
   gamesGet,
   gameGetWithBets,
 };
