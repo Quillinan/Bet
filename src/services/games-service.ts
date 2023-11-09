@@ -11,16 +11,31 @@ async function createGame({
 
 export type CreateGameParams = Pick<Game, "homeTeamName" | "awayTeamName">;
 
-async function updateGame(
+async function finishGame(
   gameId: number,
-  { homeTeamScore, awayTeamScore }: UpdateGameParams
+  { homeTeamScore, awayTeamScore }: FinishGameParams
 ): Promise<Game> {
-  if (!gameId || isNaN(gameId)) throw invalidDataError("gameId");
+  const game = await validateGame(gameId);
+
+  if (game.isFinished) throw invalidDataError("Game is already finished");
+
+  const bets = game.Bets;
+
+  for (const bet of bets) {
+    if (
+      bet.homeTeamScore !== homeTeamScore ||
+      bet.awayTeamScore !== awayTeamScore
+    ) {
+      await gamesRepository.updateBet(bet.id, "LOST", 0);
+    } else {
+      await gamesRepository.updateBet(bet.id, "WON", bet.amountBet);
+    }
+  }
 
   return gamesRepository.finish(gameId, { homeTeamScore, awayTeamScore });
 }
 
-export type UpdateGameParams = Pick<Game, "homeTeamScore" | "awayTeamScore">;
+export type FinishGameParams = Pick<Game, "homeTeamScore" | "awayTeamScore">;
 
 async function findGames() {
   const games = await gamesRepository.findAll();
@@ -30,17 +45,25 @@ async function findGames() {
 }
 
 async function findOneGame(gameId: number) {
-  if (!gameId || isNaN(gameId)) throw invalidDataError("gameId");
-
+  await validateGame(gameId);
   const gameWithBets = await gamesRepository.findOne(gameId);
   if (!gameWithBets) throw notFoundError;
 
   return gameWithBets;
 }
 
+async function validateGame(gameId: number) {
+  if (!gameId || isNaN(gameId)) throw invalidDataError("gameId");
+
+  const game = await gamesRepository.findOne(gameId);
+  if (!game) throw notFoundError;
+
+  return game;
+}
+
 export const gamesService = {
   createGame,
   findGames,
   findOneGame,
-  updateGame,
+  finishGame,
 };

@@ -26,7 +26,7 @@ async function gameFinish(req: Request, res: Response) {
   const { homeTeamScore, awayTeamScore } = req.body;
   const gameId = Number(req.params.id);
 
-  const game = await gamesService.updateGame(gameId, {
+  const game = await gamesService.finishGame(gameId, {
     homeTeamScore,
     awayTeamScore,
   });

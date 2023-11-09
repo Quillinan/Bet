@@ -1,4 +1,4 @@
-import { CreateGameParams, UpdateGameParams } from "@/services";
+import { CreateGameParams, FinishGameParams } from "@/services";
 import Joi from "joi";
 
 export const createGameSchema = Joi.object<CreateGameParams>({
@@ -6,7 +6,7 @@ export const createGameSchema = Joi.object<CreateGameParams>({
   awayTeamName: Joi.string().required(),
 });
 
-export const finishGameSchema = Joi.object<UpdateGameParams>({
+export const finishGameSchema = Joi.object<FinishGameParams>({
   homeTeamScore: Joi.number().required(),
   awayTeamScore: Joi.number().required(),
 });

@@ -1,5 +1,5 @@
 import { prisma } from "@/database";
-import { CreateParticipantParams } from "@/services/participants-service";
+import { CreateParticipantParams } from "@/services";
 
 async function create(data: CreateParticipantParams) {
   return prisma.participant.create({

@@ -1,4 +1,4 @@
-import { notFoundError } from "@/errors";
+import { invalidDataError, notFoundError } from "@/errors";
 import { participantsRepository } from "@/repositories";
 import { Participant } from "@prisma/client";
 
@@ -6,7 +6,9 @@ async function createParticipant({
   name,
   balance,
 }: CreateParticipantParams): Promise<Participant> {
-  balance = balance * 100;
+  if (balance < 10) throw invalidDataError("Balance must be greater than 10");
+
+  balance *= 100;
   return participantsRepository.create({ name, balance });
 }
 
