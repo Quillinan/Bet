@@ -5,10 +5,12 @@ import { Router } from "express";
 
 const participantsRouter = Router();
 
-participantsRouter.post(
-  "/",
-  validateBody(createParticipantSchema),
-  participantsController.participantPost
-);
+participantsRouter
+  .post(
+    "/",
+    validateBody(createParticipantSchema),
+    participantsController.participantPost
+  )
+  .get("/", participantsController.participantsGet);
 
 export { participantsRouter };

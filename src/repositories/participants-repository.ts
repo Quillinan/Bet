@@ -7,6 +7,11 @@ async function create(data: CreateParticipantParams) {
   });
 }
 
+async function findAll() {
+  return prisma.participant.findMany();
+}
+
 export const participantsRepository = {
   create,
+  findAll,
 };
