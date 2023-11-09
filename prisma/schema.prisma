@@ -15,7 +15,8 @@ model Participant {
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   name       String
-  balance    Int          
+  balance    Int
+  Bets       Bet[]
 }
 
 model Game {
@@ -27,6 +28,7 @@ model Game {
   homeTeamScore Int          @default(0)
   awayTeamScore Int          @default(0)
   isFinished    Boolean      @default(false)
+  Bets          Bet[]
 }
 
 model Bet {
@@ -39,5 +41,7 @@ model Bet {
   gameId        Int
   participantId Int
   status        String       @default("PENDING")
-  amountWon     Int?       
+  amountWon     Int?
+  Game          Game         @relation(fields: [gameId], references: [id])
+  Participant   Participant  @relation(fields: [participantId], references: [id])
 }
