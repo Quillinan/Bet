@@ -38,6 +38,6 @@ model Bet {
   amountBet     Int
   gameId        Int
   participantId Int
-  status        String       @default("pending")
+  status        String       @default("PENDING")
   amountWon     Int?       
 }
