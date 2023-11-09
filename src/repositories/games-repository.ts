@@ -7,6 +7,11 @@ async function create(data: CreateGameParams) {
   });
 }
 
+async function findAll() {
+  return prisma.game.findMany();
+}
+
 export const gamesRepository = {
   create,
+  findAll,
 };

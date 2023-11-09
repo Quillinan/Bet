@@ -22,6 +22,12 @@ async function gamePost(req: Request, res: Response) {
   });
 }
 
+async function gamesGet(_: any, res: Response): Promise<Response> {
+  const games = await gamesService.findGames();
+  return res.status(httpStatus.OK).send(games);
+}
+
 export const gamesController = {
   gamePost,
+  gamesGet,
 };

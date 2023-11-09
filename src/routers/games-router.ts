@@ -5,6 +5,8 @@ import { Router } from "express";
 
 const gamesRouter = Router();
 
-gamesRouter.post("/", validateBody(createGameSchema), gamesController.gamePost);
+gamesRouter
+  .post("/", validateBody(createGameSchema), gamesController.gamePost)
+  .get("/", gamesController.gamesGet);
 
 export { gamesRouter };
