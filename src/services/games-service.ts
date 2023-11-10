@@ -13,7 +13,7 @@ export type CreateGameParams = Pick<Game, "homeTeamName" | "awayTeamName">;
 
 async function findGames() {
   const games = await gamesRepository.findAll();
-  if (games.length === 0) throw notFoundError;
+  if (games.length === 0) throw notFoundError();
 
   return games;
 }
@@ -21,7 +21,7 @@ async function findGames() {
 async function findOneGame(gameId: number) {
   await validateGame(gameId);
   const gameWithBets = await gamesRepository.findOne(gameId);
-  if (!gameWithBets) throw notFoundError;
+  if (!gameWithBets) throw notFoundError();
 
   return gameWithBets;
 }
@@ -55,7 +55,7 @@ async function validateGame(gameId: number) {
   if (!gameId || isNaN(gameId)) throw invalidDataError("gameId");
 
   const game = await gamesRepository.findOne(gameId);
-  if (!game) throw notFoundError;
+  if (!game) throw notFoundError();
 
   return game;
 }

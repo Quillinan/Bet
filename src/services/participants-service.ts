@@ -14,7 +14,7 @@ async function createParticipant({
 
 async function findParticipants() {
   const participants = await participantsRepository.findAll();
-  if (participants.length === 0) throw notFoundError;
+  if (participants.length === 0) throw notFoundError();
 
   return participants;
 }
