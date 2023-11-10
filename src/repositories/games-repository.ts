@@ -35,10 +35,21 @@ async function findOne(gameId: number) {
   });
 }
 
-async function updateBet(betId: number, status: string, amountWon: number) {
+async function updateBet(betId: number, status?: string, amountWon?: number) {
   return prisma.bet.update({
     where: { id: betId },
     data: { status, amountWon },
+  });
+}
+
+async function updateWinner(participantId: number, amountWon: number) {
+  return prisma.participant.update({
+    where: { id: participantId },
+    data: {
+      balance: {
+        increment: amountWon,
+      },
+    },
   });
 }
 
@@ -48,4 +59,5 @@ export const gamesRepository = {
   findAll,
   findOne,
   updateBet,
+  updateWinner,
 };
