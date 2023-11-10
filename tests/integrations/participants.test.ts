@@ -2,7 +2,12 @@ import app, { init } from "@/app";
 import { cleanDb } from "./helper";
 import supertest from "supertest";
 import httpStatus from "http-status";
-import { createParticipant } from "../factories";
+import {
+  createParticipant,
+  generateNotValidParticipantBalance,
+  generateNotValidParticipantName,
+  generateValidParticipantBody,
+} from "../factories";
 
 beforeAll(async () => {
   await init();
@@ -32,5 +37,38 @@ describe("GET /participant", () => {
         updatedAt: participant.updatedAt.toISOString(),
       },
     ]);
+  });
+});
+
+describe("POST /participant", () => {
+  it("should respond with status 400 when body is not valid", async () => {
+    const response = await server.post("/participants");
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+  });
+  it("should respond with status 400 when name is not valid", async () => {
+    const invalidBody = generateNotValidParticipantName();
+    const response = await server.post("/participants").send(invalidBody);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+  });
+  it("should respond with status 400 when balance is not valid", async () => {
+    const invalidBody = generateNotValidParticipantBalance();
+    const response = await server.post("/participants").send(invalidBody);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+  });
+  it("should respond with status 201 when body is valid", async () => {
+    const body = generateValidParticipantBody();
+    const response = await server.post("/participants").send(body);
+
+    expect(response.status).toBe(httpStatus.CREATED);
+    expect(response.body).toEqual({
+      id: response.body.id,
+      name: body.name,
+      balance: body.balance * 100,
+      createdAt: response.body.createdAt,
+      updatedAt: response.body.updatedAt,
+    });
   });
 });
