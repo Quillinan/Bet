@@ -6,9 +6,9 @@ async function createParticipant({
   name,
   balance,
 }: CreateParticipantParams): Promise<Participant> {
-  if (balance < 10) throw invalidDataError("Balance must be greater than 10");
+  if (balance < 1000)
+    throw invalidDataError("Balance must be greater than 1000");
 
-  balance *= 100;
   return participantsRepository.create({ name, balance });
 }
 

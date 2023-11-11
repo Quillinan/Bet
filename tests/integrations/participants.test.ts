@@ -66,7 +66,7 @@ describe("POST /participants", () => {
     expect(response.body).toEqual({
       id: response.body.id,
       name: body.name,
-      balance: body.balance * 100,
+      balance: body.balance,
       createdAt: response.body.createdAt,
       updatedAt: response.body.updatedAt,
     });

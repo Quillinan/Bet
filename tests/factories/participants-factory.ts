@@ -14,19 +14,19 @@ export const generateValidParticipantBody = (
   params: Partial<Participant> = {}
 ) => ({
   name: params.name || faker.person.firstName(),
-  balance: params.balance || faker.number.int({ min: 10, max: 100 }),
+  balance: params.balance || faker.number.int({ min: 1000, max: 10000 }),
 });
 
 export const generateNotValidParticipantName = (
   params: Partial<Participant> = {}
 ) => ({
   name: params.name || faker.number.int({ min: 10, max: 100 }),
-  balance: params.balance || faker.number.int({ min: 10, max: 100 }),
+  balance: params.balance || faker.number.int({ min: 1000, max: 10000 }),
 });
 
 export const generateNotValidParticipantBalance = (
   params: Partial<Participant> = {}
 ) => ({
   name: params.name || faker.person.firstName(),
-  balance: params.balance || faker.number.int({ min: 0, max: 9 }),
+  balance: params.balance || faker.number.int({ max: 999 }),
 });
