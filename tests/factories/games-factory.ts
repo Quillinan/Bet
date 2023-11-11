@@ -20,6 +20,7 @@ export async function createGameWithBets(params: Partial<Game> = {}) {
 export const generateValidGameBody = (params: Partial<Game> = {}) => ({
   homeTeamName: params.homeTeamName || faker.company.name(),
   awayTeamName: params.awayTeamName || faker.company.name(),
+  isFinished: params.isFinished,
 });
 
 export const generateNotValidGameHome = (params: Partial<Game> = {}) => ({
