@@ -53,15 +53,15 @@ export const gamesService = {
 };
 
 async function validateGame(gameId: number) {
-  if (!gameId || isNaN(gameId)) throw invalidDataError("gameId");
+  if (!gameId || isNaN(gameId)) throw invalidDataError("gameId is not valid");
   const game = await gamesRepository.findOne(gameId);
   if (!game) throw notFoundError();
 
   return game;
 }
 
-async function checkBets(
-  bets: Bet[],
+export async function checkBets(
+  bets: Partial<Bet[]>,
   homeTeamScore: number,
   awayTeamScore: number
 ) {
@@ -83,7 +83,11 @@ async function checkBets(
   return { total, totalWinners };
 }
 
-async function updateWinners(bets: Bet[], total: number, totalWinners: number) {
+export async function updateWinners(
+  bets: Bet[],
+  total: number,
+  totalWinners: number
+) {
   const tax = 0.3;
   for (const bet of bets) {
     if (bet.status == "WON") {
@@ -93,14 +97,13 @@ async function updateWinners(bets: Bet[], total: number, totalWinners: number) {
         bet.amountBet,
         tax
       );
-      console.log(amountBet);
       await gamesRepository.updateBet(bet.id, undefined, amountBet);
       await gamesRepository.updateWinner(bet.participantId, amountBet);
     }
   }
 }
 
-function calculateWinnerAmount(
+export function calculateWinnerAmount(
   total: number,
   totalWinners: number,
   participantAmount: number,

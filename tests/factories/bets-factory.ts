@@ -11,9 +11,11 @@ export async function createBet(params: Partial<Bet> = {}): Promise<Bet> {
 export const generateValidBetBody = (params: Partial<Bet> = {}) => ({
   homeTeamScore: params.homeTeamScore || faker.number.int({ min: 0, max: 9 }),
   awayTeamScore: params.awayTeamScore || faker.number.int({ min: 0, max: 9 }),
-  amountBet: params.amountBet || faker.number.int(),
+  amountBet: params.amountBet || faker.number.int({ min: 1000, max: 10000 }),
   gameId: params.gameId || faker.number.int(),
   participantId: params.participantId || faker.number.int(),
+  status: params.status,
+  amountWon: params.amountWon,
 });
 
 export const generateNotValidBet = (params: Partial<Bet> = {}) => ({

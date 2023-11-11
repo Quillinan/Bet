@@ -6,8 +6,11 @@ import {
   createGame,
   createGameWithBets,
   generateNotValidGameAway,
+  generateNotValidGameFinishAway,
+  generateNotValidGameFinishHome,
   generateNotValidGameHome,
   generateValidGameBody,
+  generateValidGameFinish,
 } from "../factories";
 
 beforeAll(async () => {
@@ -109,6 +112,70 @@ describe("POST /games", () => {
       awayTeamName: body.awayTeamName,
       homeTeamScore: response.body.homeTeamScore,
       awayTeamScore: response.body.awayTeamScore,
+      isFinished: response.body.isFinished,
+    });
+  });
+});
+
+describe("POST /games/:id/finish", () => {
+  it("should respond with status 404 when id is not valid", async () => {
+    const response = await server.get("/games/string/finish");
+
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+  });
+
+  it("should respond with status 404 when dont exist games", async () => {
+    const game = await createGame();
+    await cleanDb();
+    const response = await server.get(`/games/${game.id}/finish`);
+
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+  });
+
+  it("should respond with status 400 when homeTeamScore is not valid", async () => {
+    const game = await createGame();
+    const invalidBody = generateNotValidGameFinishHome();
+    const response = await server
+      .post(`/games/${game.id}/finish`)
+      .send(invalidBody);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+  });
+
+  it("should respond with status 400 when awayTeamScore is not valid", async () => {
+    const game = await createGame();
+    const invalidBody = generateNotValidGameFinishAway();
+    const response = await server
+      .post(`/games/${game.id}/finish`)
+      .send(invalidBody);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+  });
+
+  it("should respond with status 400 when game is finished", async () => {
+    const game = await createGame({
+      isFinished: true,
+    });
+    const body = generateValidGameFinish();
+    const response = await server.post(`/games/${game.id}/finish`).send(body);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+  });
+
+  it("should respond with status 200 when body is valid", async () => {
+    const game = await createGame();
+    const body = generateValidGameFinish();
+    const response = await server.post(`/games/${game.id}/finish`).send(body);
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.body).toEqual({
+      id: response.body.id,
+      createdAt: response.body.createdAt,
+      updatedAt: response.body.updatedAt,
+      homeTeamName: response.body.homeTeamName,
+      awayTeamName: response.body.awayTeamName,
+      homeTeamScore: body.homeTeamScore,
+      awayTeamScore: body.awayTeamScore,
       isFinished: response.body.isFinished,
     });
   });

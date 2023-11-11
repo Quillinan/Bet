@@ -49,7 +49,7 @@ async function gamesGet(_: any, res: Response): Promise<Response> {
 }
 
 async function gameGetWithBets(req: Request, res: Response) {
-  const gameId = Number(req.params.gameId);
+  const gameId = Number(req.params.id);
 
   const gamesWithBets = await gamesService.findOneGame(gameId);
   res.status(httpStatus.OK).send(gamesWithBets);
