@@ -16,7 +16,7 @@ beforeAll(async () => {
 
 const server = supertest(app);
 
-describe("GET /participant", () => {
+describe("GET /participants", () => {
   it("should respond with status 404 when dont exist participants", async () => {
     const response = await server.get("/participants");
 
@@ -40,7 +40,7 @@ describe("GET /participant", () => {
   });
 });
 
-describe("POST /participant", () => {
+describe("POST /participants", () => {
   it("should respond with status 400 when body is not valid", async () => {
     const response = await server.post("/participants");
 
