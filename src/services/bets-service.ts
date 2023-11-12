@@ -36,7 +36,7 @@ async function validateBet(
   );
   if (!checkBalance) throw invalidDataError("Balance is not enough");
   const checkGame = await betsRepository.checkGame(gameId);
-  if (!checkGame) throw invalidDataError("Game is already finished");
+  if (!checkGame) throw invalidDataError("Game is invalid");
 }
 
 export const betsService = {

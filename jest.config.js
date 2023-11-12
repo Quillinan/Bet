@@ -8,9 +8,9 @@ module.exports = {
   testMatch: ["<rootDir>/tests/**/*.(test|spec).ts"],
   moduleNameMapper: {
     "@/(.*)": "<rootDir>/src/$1",
-    "@test/(.*)": "<rootDir>/tests/$1",
+    "@test/(.*)": "<rootDir>/tests/$3",
     //axios: 'axios/dist/node/axios.cjs',
   },
   restoreMocks: true,
-  //collectCoverage: true,
+  collectCoverage: true,
 };

@@ -34,7 +34,7 @@ async function checkGame(gameId: number): Promise<boolean> {
     where: { id: gameId },
   });
 
-  return game ? !game.isFinished : true;
+  return game ? !game.isFinished : false;
 }
 
 export const betsRepository = {

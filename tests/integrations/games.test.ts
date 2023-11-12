@@ -66,7 +66,6 @@ describe("GET /games/:id", () => {
 
     expect(response.status).toBe(httpStatus.OK);
 
-    // Aguarde a resolução da promise antes de comparar
     expect(response.body).toEqual({
       id: game.id,
       createdAt: game.createdAt.toISOString(),
