@@ -1,5 +1,5 @@
 import { betsRepository } from "@/repositories";
-import { createBet, createGame, createParticipant } from "../factories";
+import { createGame, createParticipant } from "../factories";
 import { init } from "@/app";
 import { cleanDb } from "../integrations/helper";
 import { prisma } from "@/database";
@@ -21,6 +21,18 @@ describe("checkBalance", () => {
     expect(result).toBe(false);
   });
 
+  it("should return true if the participant hasnt enough balance", async () => {
+    const participant = await createParticipant();
+    const requiredBalance = participant.balance + 1;
+
+    const result = await betsRepository.checkBalance(
+      participant.id,
+      requiredBalance
+    );
+
+    expect(result).toBe(false);
+  });
+
   it("should return true if the participant has enough balance", async () => {
     const participant = await createParticipant();
     const requiredBalance = participant.balance - 1;
@@ -34,7 +46,7 @@ describe("checkBalance", () => {
   });
 });
 
-describe("updateBalance", () => {
+describe("reduceBalance", () => {
   it("should decrement the participant's balance", async () => {
     const participant = await createParticipant();
 
@@ -50,7 +62,7 @@ describe("updateBalance", () => {
         updatedAt: new Date(),
       });
 
-    await betsRepository.updateBalance(participant.id, balanceReduction);
+    await betsRepository.reduceBalance(participant.id, balanceReduction);
 
     expect(updateMock).toHaveBeenCalledWith({
       where: { id: participant.id },

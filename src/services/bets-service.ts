@@ -10,7 +10,7 @@ async function createBet({
   participantId,
 }: CreateBetParams): Promise<Bet> {
   await validateBet(amountBet, gameId, participantId);
-  await betsRepository.updateBalance(participantId, amountBet);
+  await betsRepository.reduceBalance(participantId, amountBet);
   return betsRepository.create({
     homeTeamScore,
     awayTeamScore,

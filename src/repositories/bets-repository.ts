@@ -18,7 +18,7 @@ async function checkBalance(
   return participant?.balance >= requiredBalance ?? false;
 }
 
-async function updateBalance(participantId: number, balanceReduction: number) {
+async function reduceBalance(participantId: number, balanceReduction: number) {
   return prisma.participant.update({
     where: { id: participantId },
     data: {
@@ -40,6 +40,6 @@ async function checkGame(gameId: number): Promise<boolean> {
 export const betsRepository = {
   create,
   checkBalance,
-  updateBalance,
+  reduceBalance,
   checkGame,
 };

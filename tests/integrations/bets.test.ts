@@ -5,9 +5,14 @@ import httpStatus from "http-status";
 import {
   createGame,
   createParticipant,
-  generateNotValidBet,
+  generateNotValidBetAmount,
+  generateNotValidBetAway,
+  generateNotValidBetGame,
+  generateNotValidBetHome,
+  generateNotValidBetParticipant,
   generateValidBetBody,
 } from "../factories";
+import { betsRepository } from "@/repositories";
 
 beforeAll(async () => {
   await init();
@@ -22,12 +27,40 @@ describe("POST /bets", () => {
 
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
   });
-  it("should respond with status 400 when body is not valid", async () => {
-    const invalidBody = generateNotValidBet();
+  it("should respond with status 400 when homeTeamScore is not valid", async () => {
+    const invalidBody = generateNotValidBetHome();
     const response = await server.post("/bets").send(invalidBody);
 
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
   });
+  it("should respond with status 400 when awayTeamScore is not valid", async () => {
+    const invalidBody = generateNotValidBetAway();
+    const response = await server.post("/bets").send(invalidBody);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+  });
+
+  it("should respond with status 400 when amountBet is not valid", async () => {
+    const invalidBody = generateNotValidBetAmount();
+    const response = await server.post("/bets").send(invalidBody);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+  });
+
+  it("should respond with status 400 when gameId is not valid", async () => {
+    const invalidBody = generateNotValidBetGame();
+    const response = await server.post("/bets").send(invalidBody);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+  });
+
+  it("should respond with status 400 when participantId is not valid", async () => {
+    const invalidBody = generateNotValidBetParticipant();
+    const response = await server.post("/bets").send(invalidBody);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+  });
+
   it("should respond with status 400 when amountBet exceeds participant balance", async () => {
     const participant = await createParticipant();
     const game = await createGame();
@@ -46,7 +79,6 @@ describe("POST /bets", () => {
     const game = await createGame({
       isFinished: true,
     });
-
     const body = generateValidBetBody({
       amountBet: participant.balance,
       gameId: game.id,
@@ -60,12 +92,20 @@ describe("POST /bets", () => {
     const participant = await createParticipant();
     const game = await createGame();
 
+    const reduceBalanceSpy = jest.spyOn(betsRepository, "reduceBalance");
+
     const body = generateValidBetBody({
       amountBet: participant.balance,
       gameId: game.id,
       participantId: participant.id,
     });
+
     const response = await server.post("/bets").send(body);
+
+    expect(reduceBalanceSpy).toHaveBeenCalledWith(
+      participant.id,
+      body.amountBet
+    );
 
     expect(response.status).toBe(httpStatus.CREATED);
     expect(response.body).toEqual({
@@ -80,5 +120,7 @@ describe("POST /bets", () => {
       status: response.body.status,
       amountWon: response.body.amountWon,
     });
+
+    reduceBalanceSpy.mockRestore();
   });
 });
