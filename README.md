@@ -231,8 +231,7 @@ Neste desafio, usaremos este contexto e você deverá implementar o back-end de 
 
 ```
 - npm i
-- npx prisma generate
-- npx prisma migrate
+- npm run prisma:dev
 - npm run dev
 ```
 
