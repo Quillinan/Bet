@@ -19,7 +19,7 @@ async function participantPost(req: Request, res: Response) {
   });
 }
 
-async function participantsGet(_: any, res: Response): Promise<Response> {
+async function participantsGet(_: Request, res: Response): Promise<Response> {
   const participants = await participantsService.findParticipants();
   return res.status(httpStatus.OK).send(participants);
 }

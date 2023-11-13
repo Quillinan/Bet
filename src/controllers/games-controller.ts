@@ -43,7 +43,7 @@ async function gameFinish(req: Request, res: Response) {
   });
 }
 
-async function gamesGet(_: any, res: Response): Promise<Response> {
+async function gamesGet(_: Request, res: Response): Promise<Response> {
   const games = await gamesService.findGames();
   return res.status(httpStatus.OK).send(games);
 }
