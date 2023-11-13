@@ -234,7 +234,6 @@ Neste desafio, usaremos este contexto e você deverá implementar o back-end de 
 - npx prisma generate
 - npx prisma migrate
 - npm run dev
-
 ```
 
 #
