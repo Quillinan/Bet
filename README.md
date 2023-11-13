@@ -11,3 +11,235 @@ Apostar com os amigos e amigas no resultado de um jogo de futebol nunca foi novi
 E é claro que não poderíamos ficar de fora desta onda!
 
 Neste desafio, usaremos este contexto e você deverá implementar o back-end de um sistema de apostas de uma casa de apostas que deseja automatizar os seus processos para competir com esses aplicativos.
+
+#
+
+### Rotas do projeto:
+
+<!--
+<details>
+</details>
+
+<summary>
+</summary>
+-->
+<details>   
+    <summary>POST <code>/participants</code></summary>
+
+- Cria um participante com determinado saldo inicial.
+
+- Entrada:
+  ```ts
+  {
+    name: string;
+    balance: number; // representado em centavos, ou seja, R$ 10,00 -> 1000
+  }
+  ```
+- Saída:
+
+  ```ts
+  {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    name: string;
+    balance: number; // representado em centavos, ou seja, R$ 10,00 -> 1000
+  }
+  ```
+
+  </details>
+
+<details>
+    <summary>POST <code>/games</code></summary>
+
+- Cria um novo jogo, com placar inicial 0x0 e marcado como não finalizado.
+
+- Entrada:
+  ```ts
+  {
+    homeTeamName: string;
+    awayTeamName: string;
+  }
+  ```
+- Saída:
+
+  ```ts
+  {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    homeTeamName: string;
+    awayTeamName: string;
+    homeTeamScore: number; // inicialmente 0
+    awayTeamScore: number; // inicialmente 0
+    isFinished: boolean; // inicialmente false
+  }
+  ```
+
+  </details>
+
+<details>
+<summary>POST <code>/bets</code></summary>
+
+- Cadastra uma aposta de um participante em um determinado jogo. O valor da aposta deve ser descontado imediatamente do saldo do participante.
+- Entrada:
+  ```ts
+  {
+    homeTeamName: string;
+    awayTeamName: string;
+  }
+  ```
+- Saída: o objeto do jogo criado.
+  ```ts
+  {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    homeTeamName: string;
+    awayTeamName: string;
+    homeTeamScore: number; // inicialmente 0
+    awayTeamScore: number; // inicialmente 0
+    isFinished: boolean; // inicialmente false
+  }
+  ```
+  </details>
+
+<details>
+
+<summary>POST <code>/games/:id/finish</code></summary>
+
+- Finaliza um jogo e consequentemente atualiza todas as apostas atreladas a ele, calculando o valor ganho em cada uma e atualizando o saldo dos participantes ganhadores.
+
+- Entrada:
+
+  ```ts
+  {
+    homeTeamScore: number;
+    awayTeamScore: number;
+  }
+  ```
+
+- Saída: o objeto do jogo criado.
+  ```ts
+  {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    homeTeamName: string;
+    awayTeamName: string;
+    homeTeamScore: number;
+    awayTeamScore: number;
+    isFinished: boolean;
+  }
+  ```
+  </details>
+
+<details>
+<summary>GET <code>/participants</code></summary>
+
+- Retorna todos os participantes e seus respectivos saldos.
+
+- Saída: o objeto do jogo criado.
+
+  ```ts
+      [
+          {
+              id: number;
+              createdAt: string;
+              updatedAt: string;
+              name: string;
+              balance: number; // representado em centavos, ou seja, R$ 10,00 -> 1000
+          },
+          {...}
+      ]
+  ```
+
+</details>
+
+<details>
+<summary>GET <code>/games</code></summary>
+
+- Retorna todos os jogos cadastrados.
+
+- Saída: array de todos os jogos
+
+  ```ts
+      [
+          {
+              id: number;
+              createdAt: string;
+              updatedAt: string;
+              homeTeamName: string;
+              awayTeamName: string;
+              homeTeamScore: number;
+              awayTeamScore: number;
+              isFinished: boolean;
+          },
+          {...}
+      ]
+  ```
+
+</details>
+
+<details>
+<summary>GET <code>/games/:id</code></summary>
+
+- Retorna os dados de um jogo junto com as apostas atreladas a ele.
+
+- Saída: o objeto do jogo contendo a array de apostas realizadas nele.
+  ```ts
+  {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    homeTeamName: string;
+    awayTeamName: string;
+    homeTeamScore: number;
+    awayTeamScore: number;
+    isFinished: boolean;
+    bets: {
+      id: number;
+      createdAt: string;
+      updatedAt: string;
+      homeTeamScore: number;
+      awayTeamScore: number;
+      amountBet: number; // representado em centavos, ou seja, R$ 10,00 -> 1000
+      gameId: number;
+      participantId: number;
+      status: string; // podendo ser PENDING, WON ou LOST
+      amountWon: number || null; // nulo quando a aposta ainda está PENDING; number caso a aposta já esteja WON ou LOST, com o valor ganho representado em centavos
+    }
+    [];
+  }
+  ```
+
+</details>
+
+#
+
+### Tecnologias
+
+- TypeScript;
+- Node + Express;
+- Prisma (ORM);
+- Postgres;
+- Jest e Supertest.
+
+#
+
+### Como rodar o projeto
+
+```
+- npm i
+- npx prisma generate
+- npx prisma migrate
+- npm run dev
+
+```
+
+#
+
+### Deploy do projeto
+
+Web Service:
+`https://bet-b61y.onrender.com`
