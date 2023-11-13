@@ -241,5 +241,4 @@ Neste desafio, usaremos este contexto e você deverá implementar o back-end de 
 
 ### Deploy do projeto
 
-Web Service:
 `https://bet-b61y.onrender.com`
