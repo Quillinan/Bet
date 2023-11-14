@@ -6,7 +6,7 @@
   "scripts": {
     "prebuild": "rm -rf dist",
     "build": "tsc -p tsconfig.build.json && tsc-alias",
-    "start": "node -r tsconfig-paths/register dist/server.js",
+    "start": "node dist/server.js",
     "startTS": "ts-node -r tsconfig-paths/register src/server.ts",
     "prisma:dev": "npx prisma generate && npx prisma migrate dev",
     "prisma:deploy": "npx prisma generate && npx prisma migrate deploy",
