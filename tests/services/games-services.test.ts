@@ -1,16 +1,8 @@
 import { init } from "@/app";
 import { cleanDb } from "../integrations/helper";
-import {
-  betsRepository,
-  gamesRepository,
-  participantsRepository,
-} from "@/repositories";
+import { betsRepository, participantsRepository } from "@/repositories";
 import { createBet, createGame, createParticipant } from "../factories";
-import {
-  calculateWinnerAmount,
-  checkBets,
-  updateBetWinners,
-} from "@/services/games-service";
+import { calculateWinnerAmount, checkBets, updateBetWinners } from "@/services";
 
 beforeAll(async () => {
   await init();
