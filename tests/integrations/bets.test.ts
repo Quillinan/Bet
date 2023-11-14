@@ -12,7 +12,7 @@ import {
   generateNotValidBetParticipant,
   generateValidBetBody,
 } from "../factories";
-import { betsRepository } from "@/repositories";
+import { participantsRepository } from "@/repositories";
 
 beforeAll(async () => {
   await init();
@@ -92,7 +92,10 @@ describe("POST /bets", () => {
     const participant = await createParticipant();
     const game = await createGame();
 
-    const reduceBalanceSpy = jest.spyOn(betsRepository, "reduceBalance");
+    const reduceBalanceSpy = jest.spyOn(
+      participantsRepository,
+      "reduceBalance"
+    );
 
     const body = generateValidBetBody({
       amountBet: participant.balance,

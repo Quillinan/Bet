@@ -7,39 +7,14 @@ async function create(data: CreateBetParams) {
   });
 }
 
-async function checkBalance(
-  participantId: number,
-  requiredBalance: number
-): Promise<boolean> {
-  const participant = await prisma.participant.findUnique({
-    where: { id: participantId },
+async function updateBet(betId: number, status?: string, amountWon?: number) {
+  return prisma.bet.update({
+    where: { id: betId },
+    data: { status, amountWon },
   });
-
-  return participant?.balance >= requiredBalance ?? false;
-}
-
-async function reduceBalance(participantId: number, balanceReduction: number) {
-  return prisma.participant.update({
-    where: { id: participantId },
-    data: {
-      balance: {
-        decrement: balanceReduction,
-      },
-    },
-  });
-}
-
-async function checkGame(gameId: number): Promise<boolean> {
-  const game = await prisma.game.findUnique({
-    where: { id: gameId },
-  });
-
-  return game ? !game.isFinished : false;
 }
 
 export const betsRepository = {
   create,
-  checkBalance,
-  reduceBalance,
-  checkGame,
+  updateBet,
 };

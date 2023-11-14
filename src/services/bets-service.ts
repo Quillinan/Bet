@@ -1,5 +1,9 @@
 import { invalidDataError } from "@/errors";
-import { betsRepository } from "@/repositories";
+import {
+  betsRepository,
+  gamesRepository,
+  participantsRepository,
+} from "@/repositories";
 import { Bet } from "@prisma/client";
 
 async function createBet({
@@ -10,7 +14,7 @@ async function createBet({
   participantId,
 }: CreateBetParams): Promise<Bet> {
   await validateBet(amountBet, gameId, participantId);
-  await betsRepository.reduceBalance(participantId, amountBet);
+  await participantsRepository.reduceBalance(participantId, amountBet);
   return betsRepository.create({
     homeTeamScore,
     awayTeamScore,
@@ -25,20 +29,20 @@ export type CreateBetParams = Pick<
   "homeTeamScore" | "awayTeamScore" | "amountBet" | "gameId" | "participantId"
 >;
 
+export const betsService = {
+  createBet,
+};
+
 async function validateBet(
   amountBet: number,
   gameId: number,
   participantId: number
 ) {
-  const checkBalance = await betsRepository.checkBalance(
+  const checkBalance = await participantsRepository.checkBalance(
     participantId,
     amountBet
   );
   if (!checkBalance) throw invalidDataError("Balance is not enough");
-  const checkGame = await betsRepository.checkGame(gameId);
+  const checkGame = await gamesRepository.checkGame(gameId);
   if (!checkGame) throw invalidDataError("Game is invalid");
 }
-
-export const betsService = {
-  createBet,
-};

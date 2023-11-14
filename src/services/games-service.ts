@@ -1,5 +1,9 @@
 import { invalidDataError, notFoundError } from "@/errors";
-import { gamesRepository } from "@/repositories";
+import {
+  betsRepository,
+  gamesRepository,
+  participantsRepository,
+} from "@/repositories";
 import { Bet, Game } from "@prisma/client";
 
 async function createGame({
@@ -38,7 +42,7 @@ async function finishGame(
 
   const totals = await checkBets(bets, homeTeamScore, awayTeamScore);
 
-  await updateWinners(bets, totals.total, totals.totalWinners);
+  await updateBetWinners(bets, totals.total, totals.totalWinners);
 
   return gamesRepository.finish(gameId, { homeTeamScore, awayTeamScore });
 }
@@ -74,16 +78,16 @@ export async function checkBets(
       bet.homeTeamScore == homeTeamScore &&
       bet.awayTeamScore == awayTeamScore
     ) {
-      await gamesRepository.updateBet(bet.id, "WON");
+      await betsRepository.updateBet(bet.id, "WON");
       totalWinners += bet.amountBet;
     } else {
-      await gamesRepository.updateBet(bet.id, "LOST", 0);
+      await betsRepository.updateBet(bet.id, "LOST", 0);
     }
   }
   return { total, totalWinners };
 }
 
-export async function updateWinners(
+export async function updateBetWinners(
   bets: Bet[],
   total: number,
   totalWinners: number
@@ -97,8 +101,8 @@ export async function updateWinners(
         bet.amountBet,
         tax
       );
-      await gamesRepository.updateBet(bet.id, undefined, amountBet);
-      await gamesRepository.updateWinner(bet.participantId, amountBet);
+      await betsRepository.updateBet(bet.id, undefined, amountBet);
+      await participantsRepository.updateWinner(bet.participantId, amountBet);
     }
   }
 }

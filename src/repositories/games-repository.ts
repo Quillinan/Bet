@@ -35,22 +35,12 @@ async function findOne(gameId: number) {
   });
 }
 
-async function updateBet(betId: number, status?: string, amountWon?: number) {
-  return prisma.bet.update({
-    where: { id: betId },
-    data: { status, amountWon },
+async function checkGame(gameId: number): Promise<boolean> {
+  const game = await prisma.game.findUnique({
+    where: { id: gameId },
   });
-}
 
-async function updateWinner(participantId: number, amountWon: number) {
-  return prisma.participant.update({
-    where: { id: participantId },
-    data: {
-      balance: {
-        increment: amountWon,
-      },
-    },
-  });
+  return game ? !game.isFinished : false;
 }
 
 export const gamesRepository = {
@@ -58,6 +48,5 @@ export const gamesRepository = {
   finish,
   findAll,
   findOne,
-  updateBet,
-  updateWinner,
+  checkGame,
 };

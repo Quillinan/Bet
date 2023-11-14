@@ -1,11 +1,15 @@
 import { init } from "@/app";
 import { cleanDb } from "../integrations/helper";
-import { gamesRepository } from "@/repositories";
+import {
+  betsRepository,
+  gamesRepository,
+  participantsRepository,
+} from "@/repositories";
 import { createBet, createGame, createParticipant } from "../factories";
 import {
   calculateWinnerAmount,
   checkBets,
-  updateWinners,
+  updateBetWinners,
 } from "@/services/games-service";
 
 beforeAll(async () => {
@@ -34,7 +38,7 @@ describe("checkBets", () => {
     const homeTeamScore = bets[1].homeTeamScore;
     const awayTeamScore = bets[1].awayTeamScore;
 
-    const updateBetMock = jest.spyOn(gamesRepository, "updateBet");
+    const updateBetMock = jest.spyOn(betsRepository, "updateBet");
 
     await checkBets(bets, homeTeamScore, awayTeamScore);
 
@@ -43,7 +47,7 @@ describe("checkBets", () => {
   });
 });
 
-describe("updateWinners", () => {
+describe("updateBetWinners", () => {
   it("should correctly update winners", async () => {
     const game = await createGame();
     const participant1 = await createParticipant();
@@ -76,10 +80,10 @@ describe("updateWinners", () => {
 
     const bets = [bet1, bet2];
 
-    const updateBetMock = jest.spyOn(gamesRepository, "updateBet");
-    const updateWinnerMock = jest.spyOn(gamesRepository, "updateWinner");
+    const updateBetMock = jest.spyOn(betsRepository, "updateBet");
+    const updateWinnerMock = jest.spyOn(participantsRepository, "updateWinner");
 
-    await updateWinners(bets, total, total);
+    await updateBetWinners(bets, total, total);
 
     expect(updateBetMock).toHaveBeenCalledWith(
       bets[0].id,
