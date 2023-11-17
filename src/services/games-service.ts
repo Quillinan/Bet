@@ -42,7 +42,9 @@ async function finishGame(
 
   const totals = await checkBets(bets, homeTeamScore, awayTeamScore);
 
-  await updateBetWinners(bets, totals.total, totals.totalWinners);
+  const updatedBets = (await findOneGame(game.id)).Bets;
+
+  await updateBetWinners(updatedBets, totals.total, totals.totalWinners);
 
   return gamesRepository.finish(gameId, { homeTeamScore, awayTeamScore });
 }
@@ -94,7 +96,6 @@ export async function updateBetWinners(
 ) {
   const tax = 0.3;
   for (const bet of bets) {
-    console.log(bet.status);
     if (bet.status == "WON") {
       const amountBet = calculateWinnerAmount(
         total,
@@ -103,7 +104,6 @@ export async function updateBetWinners(
         tax
       );
       await betsRepository.updateBet(bet.id, undefined, amountBet);
-      console.log(amountBet);
       await participantsRepository.updateWinner(bet.participantId, amountBet);
     }
   }
@@ -115,7 +115,6 @@ export function calculateWinnerAmount(
   participantAmount: number,
   tax: number
 ): number {
-  console.log(total, totalWinners, participantAmount);
   const amountWon = (participantAmount / totalWinners) * total * (1 - tax);
   return Math.floor(amountWon);
 }
