@@ -5,5 +5,9 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: "module",
   },
-  rules: {},
+  plugins: ["duplicate-code"],
+  rules: {
+    "max-lines-per-function": ["error", { max: 20 }],
+    "max-params": ["error", { max: 3 }],
+  },
 };

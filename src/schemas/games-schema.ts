@@ -7,6 +7,6 @@ export const createGameSchema = Joi.object<CreateGameParams>({
 });
 
 export const finishGameSchema = Joi.object<FinishGameParams>({
-  homeTeamScore: Joi.number().required(),
-  awayTeamScore: Joi.number().required(),
+  homeTeamScore: Joi.number().min(0).required(),
+  awayTeamScore: Joi.number().min(0).required(),
 });
