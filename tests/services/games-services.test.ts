@@ -60,14 +60,12 @@ describe("updateBetWinners", () => {
     const amountBet1 = calculateWinnerAmount(
       total,
       total,
-      participant1.balance,
-      0.3
+      participant1.balance
     );
     const amountBet2 = calculateWinnerAmount(
       total,
       total,
-      participant2.balance,
-      0.3
+      participant2.balance
     );
 
     const bets = [bet1, bet2];
@@ -103,13 +101,11 @@ describe("calculateWinnerAmount", () => {
     const total = 60;
     const totalWinners = 30;
     const participantAmount = 20;
-    const tax = 0.3;
 
     const result = calculateWinnerAmount(
       total,
       totalWinners,
-      participantAmount,
-      tax
+      participantAmount
     );
 
     expect(result).toBe(28);

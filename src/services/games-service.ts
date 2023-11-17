@@ -73,7 +73,6 @@ export async function checkBets(
 ) {
   let total = 0;
   let totalWinners = 0;
-
   for (const bet of bets) {
     total += bet.amountBet;
     if (
@@ -94,14 +93,12 @@ export async function updateBetWinners(
   total: number,
   totalWinners: number
 ) {
-  const tax = 0.3;
   for (const bet of bets) {
     if (bet.status == "WON") {
       const amountBet = calculateWinnerAmount(
         total,
         totalWinners,
-        bet.amountBet,
-        tax
+        bet.amountBet
       );
       await betsRepository.updateBet(bet.id, undefined, amountBet);
       await participantsRepository.updateWinner(bet.participantId, amountBet);
@@ -112,9 +109,9 @@ export async function updateBetWinners(
 export function calculateWinnerAmount(
   total: number,
   totalWinners: number,
-  participantAmount: number,
-  tax: number
+  participantAmount: number
 ): number {
+  const tax = 0.3;
   const amountWon = (participantAmount / totalWinners) * total * (1 - tax);
   return Math.floor(amountWon);
 }
