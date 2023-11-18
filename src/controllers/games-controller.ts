@@ -1,16 +1,10 @@
 import { gamesService } from "@/services";
+import { Game } from "@prisma/client";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 
-async function postGame(req: Request, res: Response) {
-  const { homeTeamName, awayTeamName } = req.body;
-
-  const game = await gamesService.createGame({
-    homeTeamName,
-    awayTeamName,
-  });
-
-  return res.status(httpStatus.CREATED).json({
+async function formatGameResponse(res: Response, status: number, game: Game) {
+  return res.status(status).json({
     id: game.id,
     createdAt: game.createdAt,
     updatedAt: game.updatedAt,
@@ -22,6 +16,17 @@ async function postGame(req: Request, res: Response) {
   });
 }
 
+async function postGame(req: Request, res: Response) {
+  const { homeTeamName, awayTeamName } = req.body;
+
+  const game = await gamesService.createGame({
+    homeTeamName,
+    awayTeamName,
+  });
+
+  return formatGameResponse(res, httpStatus.CREATED, game);
+}
+
 async function finishGame(req: Request, res: Response) {
   const { homeTeamScore, awayTeamScore } = req.body;
   const gameId = Number(req.params.id);
@@ -31,16 +36,7 @@ async function finishGame(req: Request, res: Response) {
     awayTeamScore,
   });
 
-  return res.status(httpStatus.OK).json({
-    id: game.id,
-    createdAt: game.createdAt,
-    updatedAt: game.updatedAt,
-    homeTeamName: game.homeTeamName,
-    awayTeamName: game.awayTeamName,
-    homeTeamScore: game.homeTeamScore,
-    awayTeamScore: game.awayTeamScore,
-    isFinished: game.isFinished,
-  });
+  return formatGameResponse(res, httpStatus.OK, game);
 }
 
 async function getAllGames(_: Request, res: Response): Promise<Response> {
