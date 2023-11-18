@@ -10,13 +10,13 @@ async function createGame({
   homeTeamName,
   awayTeamName,
 }: CreateGameParams): Promise<Game> {
-  return gamesRepository.create({ homeTeamName, awayTeamName });
+  return gamesRepository.createGame({ homeTeamName, awayTeamName });
 }
 
 export type CreateGameParams = Pick<Game, "homeTeamName" | "awayTeamName">;
 
 async function findAllGames() {
-  const games = await gamesRepository.findAll();
+  const games = await gamesRepository.findManyGames();
 
   if (games.length === 0) throw notFoundError();
 
@@ -26,7 +26,7 @@ async function findAllGames() {
 async function findOneGame(gameId: number) {
   await validateGame(gameId);
 
-  const gameWithBets = await gamesRepository.findOne(gameId);
+  const gameWithBets = await gamesRepository.findOneGame(gameId);
 
   return gameWithBets;
 }
@@ -46,7 +46,10 @@ async function finishGame(
 
   await updateBetWinners(updatedBets, totals.total, totals.totalWinners);
 
-  return gamesRepository.finish(gameId, { homeTeamScore, awayTeamScore });
+  return gamesRepository.updateFinishedGame(gameId, {
+    homeTeamScore,
+    awayTeamScore,
+  });
 }
 
 export type FinishGameParams = Pick<Game, "homeTeamScore" | "awayTeamScore">;
@@ -60,7 +63,7 @@ export const gamesService = {
 
 async function validateGame(gameId: number) {
   if (!gameId || isNaN(gameId)) throw invalidDataError("gameId is not valid");
-  const game = await gamesRepository.findOne(gameId);
+  const game = await gamesRepository.findOneGame(gameId);
   if (!game) throw notFoundError();
 
   return game;

@@ -12,7 +12,7 @@ gamesRouter
     validateBody(finishGameSchema),
     gamesController.finishGame
   )
-  .get("/", gamesController.getGames)
+  .get("/", gamesController.getAllGames)
   .get("/:id", gamesController.getGameWithBets);
 
 export { gamesRouter };

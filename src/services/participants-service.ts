@@ -6,11 +6,11 @@ async function createParticipant({
   name,
   balance,
 }: CreateParticipantParams): Promise<Participant> {
-  return participantsRepository.create({ name, balance });
+  return participantsRepository.createParticipant({ name, balance });
 }
 
 async function findAllParticipants() {
-  const participants = await participantsRepository.findAll();
+  const participants = await participantsRepository.findManyParticipants();
   if (participants.length === 0) throw notFoundError();
 
   return participants;

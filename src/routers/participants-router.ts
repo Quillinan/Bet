@@ -11,6 +11,6 @@ participantsRouter
     validateBody(createParticipantSchema),
     participantsController.postParticipant
   )
-  .get("/", participantsController.getParticipants);
+  .get("/", participantsController.getAllParticipants);
 
 export { participantsRouter };

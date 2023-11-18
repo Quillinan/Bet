@@ -19,12 +19,15 @@ async function postParticipant(req: Request, res: Response) {
   });
 }
 
-async function getParticipants(_: Request, res: Response): Promise<Response> {
+async function getAllParticipants(
+  _: Request,
+  res: Response
+): Promise<Response> {
   const participants = await participantsService.findAllParticipants();
   return res.status(httpStatus.OK).send(participants);
 }
 
 export const participantsController = {
   postParticipant,
-  getParticipants,
+  getAllParticipants,
 };

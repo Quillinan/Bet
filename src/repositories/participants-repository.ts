@@ -1,13 +1,13 @@
 import { prisma } from "@/database";
 import { CreateParticipantParams } from "@/services";
 
-async function create(data: CreateParticipantParams) {
+async function createParticipant(data: CreateParticipantParams) {
   return prisma.participant.create({
     data,
   });
 }
 
-async function findAll() {
+async function findManyParticipants() {
   return prisma.participant.findMany();
 }
 
@@ -45,8 +45,8 @@ async function updateWinner(participantId: number, amountWon: number) {
 }
 
 export const participantsRepository = {
-  create,
-  findAll,
+  createParticipant,
+  findManyParticipants,
   checkBalance,
   reduceBalance,
   updateWinner,

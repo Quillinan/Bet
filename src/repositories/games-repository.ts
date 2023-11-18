@@ -1,13 +1,13 @@
 import { prisma } from "@/database";
 import { CreateGameParams, FinishGameParams } from "@/services/games-service";
 
-async function create(data: CreateGameParams) {
+async function createGame(data: CreateGameParams) {
   return prisma.game.create({
     data,
   });
 }
 
-async function finish(gameId: number, data: FinishGameParams) {
+async function updateFinishedGame(gameId: number, data: FinishGameParams) {
   return await prisma.game.update({
     where: {
       id: gameId,
@@ -20,11 +20,11 @@ async function finish(gameId: number, data: FinishGameParams) {
   });
 }
 
-async function findAll() {
+async function findManyGames() {
   return prisma.game.findMany();
 }
 
-async function findOne(gameId: number) {
+async function findOneGame(gameId: number) {
   return prisma.game.findUnique({
     where: {
       id: gameId,
@@ -35,7 +35,7 @@ async function findOne(gameId: number) {
   });
 }
 
-async function check(gameId: number): Promise<boolean> {
+async function checkGame(gameId: number): Promise<boolean> {
   const game = await prisma.game.findUnique({
     where: { id: gameId },
   });
@@ -44,9 +44,9 @@ async function check(gameId: number): Promise<boolean> {
 }
 
 export const gamesRepository = {
-  create,
-  finish,
-  findAll,
-  findOne,
-  check,
+  createGame,
+  updateFinishedGame,
+  findManyGames,
+  findOneGame,
+  checkGame,
 };
