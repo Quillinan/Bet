@@ -1,4 +1,4 @@
-import { invalidDataError, notFoundError } from "@/errors";
+import { notFoundError } from "@/errors";
 import { participantsRepository } from "@/repositories";
 import { Participant } from "@prisma/client";
 
@@ -6,13 +6,10 @@ async function createParticipant({
   name,
   balance,
 }: CreateParticipantParams): Promise<Participant> {
-  if (balance < 1000)
-    throw invalidDataError("Balance must be greater than 1000");
-
   return participantsRepository.create({ name, balance });
 }
 
-async function findParticipants() {
+async function findAllParticipants() {
   const participants = await participantsRepository.findAll();
   if (participants.length === 0) throw notFoundError();
 
@@ -23,5 +20,5 @@ export type CreateParticipantParams = Pick<Participant, "name" | "balance">;
 
 export const participantsService = {
   createParticipant,
-  findParticipants,
+  findAllParticipants,
 };

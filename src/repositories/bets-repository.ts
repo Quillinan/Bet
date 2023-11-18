@@ -7,7 +7,11 @@ async function create(data: CreateBetParams) {
   });
 }
 
-async function updateBet(betId: number, status?: string, amountWon?: number) {
+async function updateBetStatusAndAmountWon(
+  betId: number,
+  status?: string,
+  amountWon?: number
+) {
   return prisma.bet.update({
     where: { id: betId },
     data: { status, amountWon },
@@ -16,5 +20,5 @@ async function updateBet(betId: number, status?: string, amountWon?: number) {
 
 export const betsRepository = {
   create,
-  updateBet,
+  updateBetStatusAndAmountWon,
 };

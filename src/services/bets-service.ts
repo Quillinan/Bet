@@ -43,6 +43,6 @@ async function validateBet(
     amountBet
   );
   if (!checkBalance) throw invalidDataError("Balance is not enough");
-  const checkGame = await gamesRepository.checkGame(gameId);
+  const checkGame = await gamesRepository.check(gameId);
   if (!checkGame) throw invalidDataError("Game is invalid");
 }

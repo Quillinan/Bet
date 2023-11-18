@@ -11,6 +11,7 @@
     "prisma:deploy": "npx prisma generate && npx prisma migrate deploy",
     "dev": "cross-env NODE_ENV=development nodemon --watch 'src/' --exec 'ts-node -r tsconfig-paths/register ./src/server.ts' -e ts",
     "test": "cross-env NODE_ENV=test jest --passWithNoTests --runInBand",
+    "coverage": "jest --coverage --runInBand",
     "lint": "eslint src"
   },
   "author": "",

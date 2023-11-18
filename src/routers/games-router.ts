@@ -6,13 +6,13 @@ import { Router } from "express";
 const gamesRouter = Router();
 
 gamesRouter
-  .post("/", validateBody(createGameSchema), gamesController.gamePost)
+  .post("/", validateBody(createGameSchema), gamesController.postGame)
   .post(
     "/:id/finish",
     validateBody(finishGameSchema),
-    gamesController.gameFinish
+    gamesController.finishGame
   )
-  .get("/", gamesController.gamesGet)
-  .get("/:id", gamesController.gameGetWithBets);
+  .get("/", gamesController.getGames)
+  .get("/:id", gamesController.getGameWithBets);
 
 export { gamesRouter };

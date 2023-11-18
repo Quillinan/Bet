@@ -35,7 +35,7 @@ async function findOne(gameId: number) {
   });
 }
 
-async function checkGame(gameId: number): Promise<boolean> {
+async function check(gameId: number): Promise<boolean> {
   const game = await prisma.game.findUnique({
     where: { id: gameId },
   });
@@ -48,5 +48,5 @@ export const gamesRepository = {
   finish,
   findAll,
   findOne,
-  checkGame,
+  check,
 };

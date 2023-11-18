@@ -5,6 +5,6 @@ import { Router } from "express";
 
 const betsRouter = Router();
 
-betsRouter.post("/", validateBody(createBetSchema), betsController.betPost);
+betsRouter.post("/", validateBody(createBetSchema), betsController.postBet);
 
 export { betsRouter };

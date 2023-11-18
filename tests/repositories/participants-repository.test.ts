@@ -10,7 +10,7 @@ beforeAll(async () => {
 });
 
 describe("checkBalance", () => {
-  it("should return false if participant does not exist", async () => {
+  it("should return false if participant doesnt exist", async () => {
     const result = await participantsRepository.checkBalance(-1, 50);
 
     expect(result).toBe(false);
@@ -26,15 +26,22 @@ describe("checkBalance", () => {
 
     expect(result).toBe(false);
   });
-  it("should return true if participant has enough balance", async () => {
+  it("should return true if participant has enough balance with the correct participant ID", async () => {
     const participant = await createParticipant();
+
+    const findUniqueSpy = jest.spyOn(prisma.participant, "findUnique");
 
     const result = await participantsRepository.checkBalance(
       participant.id,
       participant.balance
     );
 
+    expect(findUniqueSpy).toHaveBeenCalledWith({
+      where: { id: participant.id },
+    });
     expect(result).toBe(true);
+
+    findUniqueSpy.mockRestore();
   });
 });
 

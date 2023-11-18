@@ -2,7 +2,7 @@ import { gamesService } from "@/services";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 
-async function gamePost(req: Request, res: Response) {
+async function postGame(req: Request, res: Response) {
   const { homeTeamName, awayTeamName } = req.body;
 
   const game = await gamesService.createGame({
@@ -22,7 +22,7 @@ async function gamePost(req: Request, res: Response) {
   });
 }
 
-async function gameFinish(req: Request, res: Response) {
+async function finishGame(req: Request, res: Response) {
   const { homeTeamScore, awayTeamScore } = req.body;
   const gameId = Number(req.params.id);
 
@@ -43,12 +43,12 @@ async function gameFinish(req: Request, res: Response) {
   });
 }
 
-async function gamesGet(_: Request, res: Response): Promise<Response> {
-  const games = await gamesService.findGames();
+async function getGames(_: Request, res: Response): Promise<Response> {
+  const games = await gamesService.findAllGames();
   return res.status(httpStatus.OK).send(games);
 }
 
-async function gameGetWithBets(req: Request, res: Response) {
+async function getGameWithBets(req: Request, res: Response) {
   const gameId = Number(req.params.id);
 
   const gamesWithBets = await gamesService.findOneGame(gameId);
@@ -56,8 +56,8 @@ async function gameGetWithBets(req: Request, res: Response) {
 }
 
 export const gamesController = {
-  gamePost,
-  gameFinish,
-  gamesGet,
-  gameGetWithBets,
+  postGame,
+  finishGame,
+  getGames,
+  getGameWithBets,
 };

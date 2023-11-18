@@ -30,7 +30,10 @@ describe("checkBets", () => {
     const homeTeamScore = bets[1].homeTeamScore;
     const awayTeamScore = bets[1].awayTeamScore;
 
-    const updateBetMock = jest.spyOn(betsRepository, "updateBet");
+    const updateBetMock = jest.spyOn(
+      betsRepository,
+      "updateBetStatusAndAmountWon"
+    );
 
     await checkBets(bets, homeTeamScore, awayTeamScore);
 
@@ -70,7 +73,10 @@ describe("updateBetWinners", () => {
 
     const bets = [bet1, bet2];
 
-    const updateBetMock = jest.spyOn(betsRepository, "updateBet");
+    const updateBetMock = jest.spyOn(
+      betsRepository,
+      "updateBetStatusAndAmountWon"
+    );
     const updateWinnerMock = jest.spyOn(participantsRepository, "updateWinner");
 
     await updateBetWinners(bets, total, total);

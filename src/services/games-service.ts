@@ -15,7 +15,7 @@ async function createGame({
 
 export type CreateGameParams = Pick<Game, "homeTeamName" | "awayTeamName">;
 
-async function findGames() {
+async function findAllGames() {
   const games = await gamesRepository.findAll();
 
   if (games.length === 0) throw notFoundError();
@@ -53,7 +53,7 @@ export type FinishGameParams = Pick<Game, "homeTeamScore" | "awayTeamScore">;
 
 export const gamesService = {
   createGame,
-  findGames,
+  findAllGames,
   findOneGame,
   finishGame,
 };
@@ -79,10 +79,10 @@ export async function checkBets(
       bet.homeTeamScore == homeTeamScore &&
       bet.awayTeamScore == awayTeamScore
     ) {
-      await betsRepository.updateBet(bet.id, "WON");
+      await betsRepository.updateBetStatusAndAmountWon(bet.id, "WON");
       totalWinners += bet.amountBet;
     } else {
-      await betsRepository.updateBet(bet.id, "LOST", 0);
+      await betsRepository.updateBetStatusAndAmountWon(bet.id, "LOST", 0);
     }
   }
   return { total, totalWinners };
@@ -100,7 +100,11 @@ export async function updateBetWinners(
         totalWinners,
         bet.amountBet
       );
-      await betsRepository.updateBet(bet.id, undefined, amountBet);
+      await betsRepository.updateBetStatusAndAmountWon(
+        bet.id,
+        undefined,
+        amountBet
+      );
       await participantsRepository.updateWinner(bet.participantId, amountBet);
     }
   }

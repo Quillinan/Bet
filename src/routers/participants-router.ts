@@ -9,8 +9,8 @@ participantsRouter
   .post(
     "/",
     validateBody(createParticipantSchema),
-    participantsController.participantPost
+    participantsController.postParticipant
   )
-  .get("/", participantsController.participantsGet);
+  .get("/", participantsController.getParticipants);
 
 export { participantsRouter };

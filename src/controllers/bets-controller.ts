@@ -2,7 +2,7 @@ import { betsService } from "@/services";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 
-async function betPost(req: Request, res: Response) {
+async function postBet(req: Request, res: Response) {
   const { homeTeamScore, awayTeamScore, amountBet, gameId, participantId } =
     req.body;
 
@@ -29,5 +29,5 @@ async function betPost(req: Request, res: Response) {
 }
 
 export const betsController = {
-  betPost,
+  postBet,
 };

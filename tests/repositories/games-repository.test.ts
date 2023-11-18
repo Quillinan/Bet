@@ -8,23 +8,23 @@ beforeAll(async () => {
   await cleanDb();
 });
 
-describe("checkGame", () => {
+describe("check", () => {
   it("should return false if game does not exist", async () => {
-    const result = await gamesRepository.checkGame(-1);
+    const result = await gamesRepository.check(-1);
 
     expect(result).toBe(false);
   });
   it("should return false if game is finished", async () => {
     const game = await createGame({ isFinished: true });
 
-    const result = await gamesRepository.checkGame(game.id);
+    const result = await gamesRepository.check(game.id);
 
     expect(result).toBe(false);
   });
   it("should return true if game is not finished", async () => {
     const game = await createGame();
 
-    const result = await gamesRepository.checkGame(game.id);
+    const result = await gamesRepository.check(game.id);
 
     expect(result).toBe(true);
   });

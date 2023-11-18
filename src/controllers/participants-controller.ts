@@ -2,7 +2,7 @@ import { participantsService } from "@/services";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 
-async function participantPost(req: Request, res: Response) {
+async function postParticipant(req: Request, res: Response) {
   const { name, balance } = req.body;
 
   const participant = await participantsService.createParticipant({
@@ -19,12 +19,12 @@ async function participantPost(req: Request, res: Response) {
   });
 }
 
-async function participantsGet(_: Request, res: Response): Promise<Response> {
-  const participants = await participantsService.findParticipants();
+async function getParticipants(_: Request, res: Response): Promise<Response> {
+  const participants = await participantsService.findAllParticipants();
   return res.status(httpStatus.OK).send(participants);
 }
 
 export const participantsController = {
-  participantPost,
-  participantsGet,
+  postParticipant,
+  getParticipants,
 };
