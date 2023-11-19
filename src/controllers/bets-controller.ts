@@ -3,8 +3,7 @@ import { Request, Response } from "express";
 import httpStatus from "http-status";
 
 async function postBet(req: Request, res: Response) {
-  const { homeTeamScore, awayTeamScore, amountBet, gameId, participantId } =
-    req.body;
+  const { homeTeamScore, awayTeamScore, amountBet, gameId, participantId } = req.body;
 
   const bet = await betsService.createBet({
     homeTeamScore,
@@ -14,19 +13,12 @@ async function postBet(req: Request, res: Response) {
     participantId,
   });
 
-  return res.status(httpStatus.CREATED).json({
-    id: bet.id,
-    createdAt: bet.createdAt,
-    updatedAt: bet.updatedAt,
-    homeTeamScore: bet.homeTeamScore,
-    awayTeamScore: bet.awayTeamScore,
-    amountBet: bet.amountBet,
-    gameId: bet.gameId,
-    participantId: bet.participantId,
-    status: bet.status,
-    amountWon: bet.amountWon,
-  });
+  const { id, createdAt, updatedAt, status, amountWon } = bet;
+  const response = { id, createdAt, updatedAt, homeTeamScore, awayTeamScore, amountBet, gameId, participantId, status, amountWon };
+
+  return res.status(httpStatus.CREATED).json(response);
 }
+
 
 export const betsController = {
   postBet,
