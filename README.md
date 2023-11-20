@@ -245,13 +245,14 @@ Neste desafio, usaremos este contexto e você deverá implementar o back-end de 
         
       DATABASE_URL=postgresql://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?schema=public
       ```
-</details>
+  </details>
+- Executar os comandos na pasta do projeto:
 
-```
-- npm i
-- npm run prisma:dev
-- npm run dev
-```
+    ```
+    - npm i
+    - npm run prisma:dev
+    - npm run dev
+    ```
 
 #
 
