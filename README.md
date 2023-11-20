@@ -219,11 +219,11 @@ Neste desafio, usaremos este contexto e você deverá implementar o back-end de 
 
 ### Tecnologias
 
-- TypeScript;
-- Node + Express;
-- Prisma (ORM);
-- Postgres;
-- Jest e Supertest.
+- TypeScript
+- Node(versão 18.16.1)
+- Prisma + Express
+- Postgres
+- Joi, Jest e Supertest
 
 #
 
