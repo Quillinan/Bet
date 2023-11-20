@@ -3,8 +3,10 @@ import { cleanDb } from "./helper";
 import supertest from "supertest";
 import httpStatus from "http-status";
 import {
+  createBet,
   createGame,
   createGameWithBets,
+  createParticipant,
   generateNotValidGameAway,
   generateNotValidGameFinishAway,
   generateNotValidGameFinishHome,
@@ -12,6 +14,8 @@ import {
   generateValidGameBody,
   generateValidGameFinish,
 } from "../factories";
+import { gamesService } from "@/services";
+import { gamesRepository } from "@/repositories";
 
 beforeAll(async () => {
   await init();
@@ -177,5 +181,47 @@ describe("POST /games/:id/finish", () => {
       awayTeamScore: body.awayTeamScore,
       isFinished: response.body.isFinished,
     });
+  });
+
+  it('should set the status to "LOST" for losing bets', async () => {
+    const game = await createGame();
+    const participant = await createParticipant();
+    const bet = await createBet({
+      amountBet: participant.balance,
+      gameId: game.id,
+      participantId: participant.id,
+    });
+
+    const WrongScore = bet.homeTeamScore + 1;
+
+    await gamesService.finishGame(game.id, {
+      homeTeamScore: WrongScore,
+      awayTeamScore: bet.awayTeamScore,
+    });
+
+    const updateBet = (await gamesRepository.findOneGame(game.id)).Bets;
+    const status = updateBet.map((bet) => bet.status);
+
+    expect(status).toEqual(expect.arrayContaining(["LOST"]));
+  });
+
+  it('should set the status to "WON" for winning bets', async () => {
+    const game = await createGame();
+    const participant = await createParticipant();
+    const bet = await createBet({
+      amountBet: participant.balance,
+      gameId: game.id,
+      participantId: participant.id,
+    });
+
+    await gamesService.finishGame(game.id, {
+      homeTeamScore: bet.homeTeamScore,
+      awayTeamScore: bet.awayTeamScore,
+    });
+
+    const updateBet = (await gamesRepository.findOneGame(game.id)).Bets;
+    const status = updateBet.map((bet) => bet.status);
+
+    expect(status).toEqual(expect.arrayContaining(["WON"]));
   });
 });
