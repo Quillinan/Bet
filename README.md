@@ -231,24 +231,25 @@ Neste desafio, usaremos este contexto e você deverá implementar o back-end de 
 
 - Clone o `.env.example`
 - Renomeie a cópia como `.env`
-- <details>
-    <summary> Insira os dados do seu Postgre local </summary>
+- Configure o `.env`
+  <details>
+    <summary> Insira os dados do seu Postgre </summary>
     
-    - Seguindo os padrões do documento original, preencha de acordo com o exemplo abaixo.
+    - Seguindo os padrões do documento original, preencha de acordo com o exemplo abaixo:
     
-      ```
-      POSTGRES_USERNAME= Nome do seu usuário Postgre
-      POSTGRES_PASSWORD= Senha do seu usuário Postgre
-      POSTGRES_HOST=localhost
-      POSTGRES_PORT=5432
-      POSTGRES_DATABASE= Nome do seu banco de dados
+      ```js
+      POSTGRES_USERNAME=driven //Nome do seu usuário Postgre
+      POSTGRES_PASSWORD=senhaSecreta123 //Senha do seu usuário Postgre
+      POSTGRES_HOST=localhost //Nome do Host
+      POSTGRES_PORT=5432 //Número da Porta do Postgre
+      POSTGRES_DATABASE=betDB //Nome do seu banco de dados
         
       DATABASE_URL=postgresql://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?schema=public
       ```
   </details>
 - Executar os comandos na pasta do projeto:
 
-    ```
+    ```js
     - npm i
     - npm run prisma:dev
     - npm run dev
