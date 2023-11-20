@@ -1,4 +1,4 @@
-import { gamesService } from "@/services";
+import { FilterGamesParams, gamesService } from "@/services";
 import { Game } from "@prisma/client";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
@@ -39,8 +39,16 @@ async function finishGame(req: Request, res: Response) {
   return formatGameResponse(res, httpStatus.OK, game);
 }
 
-async function getAllGames(_: Request, res: Response): Promise<Response> {
-  const games = await gamesService.findAllGames();
+async function getAllGames(req: Request, res: Response): Promise<Response> {
+  const { homeTeamName, awayTeamName, isFinished } = req.query;
+
+  const gamesParams: FilterGamesParams = {
+    homeTeamName: typeof homeTeamName === "string" ? homeTeamName : undefined,
+    awayTeamName: typeof awayTeamName === "string" ? awayTeamName : undefined,
+    isFinished: typeof isFinished === "string" ? isFinished : undefined,
+  };
+
+  const games = await gamesService.findAllGames(gamesParams);
   return res.status(httpStatus.OK).send(games);
 }
 

@@ -15,13 +15,27 @@ async function createGame({
 
 export type CreateGameParams = Pick<Game, "homeTeamName" | "awayTeamName">;
 
-async function findAllGames() {
-  const games = await gamesRepository.findManyGames();
+async function findAllGames({
+  homeTeamName,
+  awayTeamName,
+  isFinished,
+}: FilterGamesParams) {
+  const games = await gamesRepository.findManyGames({
+    homeTeamName,
+    awayTeamName,
+    isFinished,
+  });
 
   if (games.length === 0) throw notFoundError();
 
   return games;
 }
+
+export type FilterGamesParams = {
+  homeTeamName?: string;
+  awayTeamName?: string;
+  isFinished?: string;
+};
 
 async function findOneGame(gameId: number) {
   await validateGame(gameId);
@@ -69,13 +83,16 @@ async function validateGame(gameId: number) {
   return game;
 }
 
-export async function checkBets( bets: Partial<Bet[]>, homeTeamScore: number, awayTeamScore: number
+export async function checkBets(
+  bets: Partial<Bet[]>,homeTeamScore: number,awayTeamScore: number
 ) {
-  let total = 0, totalWinners = 0;
+  let total = 0,
+    totalWinners = 0;
   for (const bet of bets) {
     total += bet.amountBet;
     if (
-      bet.homeTeamScore == homeTeamScore && bet.awayTeamScore == awayTeamScore
+      bet.homeTeamScore == homeTeamScore &&
+      bet.awayTeamScore == awayTeamScore
     ) {
       await betsRepository.updateBetStatusAndAmountWon(bet.id, "WON");
       totalWinners += bet.amountBet;
@@ -86,12 +103,21 @@ export async function checkBets( bets: Partial<Bet[]>, homeTeamScore: number, aw
   return { total, totalWinners };
 }
 
-export async function updateBetWinners(bets: Bet[],total: number,totalWinners: number
+export async function updateBetWinners(
+  bets: Bet[],total: number,totalWinners: number
 ) {
   for (const bet of bets) {
     if (bet.status == "WON") {
-      const amountBet = calculateWinnerAmount(total,totalWinners,bet.amountBet);
-      await betsRepository.updateBetStatusAndAmountWon(bet.id,undefined,amountBet);
+      const amountBet = calculateWinnerAmount(
+        total,
+        totalWinners,
+        bet.amountBet
+      );
+      await betsRepository.updateBetStatusAndAmountWon(
+        bet.id,
+        undefined,
+        amountBet
+      );
       await participantsRepository.updateWinner(bet.participantId, amountBet);
     }
   }

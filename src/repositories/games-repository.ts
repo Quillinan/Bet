@@ -1,5 +1,10 @@
 import { prisma } from "@/database";
-import { CreateGameParams, FinishGameParams } from "@/services/games-service";
+import {
+  CreateGameParams,
+  FilterGamesParams,
+  FinishGameParams,
+} from "@/services/games-service";
+import { Game } from "@prisma/client";
 
 async function createGame(data: CreateGameParams) {
   return prisma.game.create({
@@ -20,9 +25,32 @@ async function updateFinishedGame(gameId: number, data: FinishGameParams) {
   });
 }
 
-async function findManyGames() {
-  return prisma.game.findMany();
+async function findManyGames(params: FilterGamesParams): Promise<Game[]> {
+  const where: GameWhereInput = {};
+  if (params.homeTeamName) {
+    where.homeTeamName = {contains: params.homeTeamName,};
+  }
+  if (params.awayTeamName) {
+    where.awayTeamName = {contains: params.awayTeamName,};
+  }
+  if (params.isFinished !== undefined && params.isFinished === "true") {
+    where.isFinished = Boolean(params.isFinished) == true;
+  }
+  if (params.isFinished !== undefined && params.isFinished === "false") {
+    where.isFinished = false;
+  }
+  return prisma.game.findMany({where,});
 }
+
+type GameWhereInput = {
+  homeTeamName?: {
+    contains: string;
+  };
+  awayTeamName?: {
+    contains: string;
+  };
+  isFinished?: boolean;
+};
 
 async function findOneGame(gameId: number) {
   return prisma.game.findUnique({
