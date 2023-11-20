@@ -231,7 +231,8 @@ Neste desafio, usaremos este contexto e você deverá implementar o back-end de 
 
 - Clone o `.env.example`
 - Renomeie a cópia como `.env`
-- Configure o `.env`
+- Para poder executar os testes, será necessário criar um outro arquivo `.env.test` com base no `.env.example`
+- Configure `.env` e `.env.test`
   <details>
     <summary> Insira os dados do seu Postgre </summary>
     
